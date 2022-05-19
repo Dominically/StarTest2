@@ -22,6 +22,8 @@ let standard_mappings = { //Currently only using axis mappings.
     "speed": [6, 7]
 }
 
+const DEADZONE = 0.1;
+
 let keysPressed = {};
 
 console.log("Input");
@@ -67,10 +69,13 @@ export function update(queries){
             let gpmap = standard_mappings[q.control];
             let strength;
             if (typeof gpmap === "number"){ //Axis
-                if (gpmap%2===0){ //Invert vertical.
-                    strength = gamepad.axes[gpmap];
+                let axis = gamepad.axes[gpmap];
+                if (Math.abs(axis) < DEADZONE){
+                    strength = 0;
+                } else if (gpmap%2===0){ //Invert vertical.
+                    strength = axis;
                 } else {
-                    strength = -gamepad.axes[gpmap];
+                    strength = -axis;
                 }
             } else {
                 strength = gamepad.buttons[gpmap[1]].value - gamepad.buttons[gpmap[0]].value;
