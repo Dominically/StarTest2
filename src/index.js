@@ -80,7 +80,7 @@ function updateInputs(){
             control: "speed",
             hi: 40,
             lo: -40,
-            normal: 0,
+            normal: 2,
             callback: (v)=>{universe.set_thrust(v)},
         },
     ]);
