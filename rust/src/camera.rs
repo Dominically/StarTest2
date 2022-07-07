@@ -1,5 +1,3 @@
-use std::f32::consts::PI;
-
 use crate::{vector3::{PointVector}, orientation::Orientation, viewport::Viewport, matrix::Matrix3};
 
 pub struct Camera {
@@ -21,7 +19,6 @@ pub struct Projector<'a> {
 }
 
 const RPY_FACTOR: f32 = 20.0;
-const MAX_ANGLE: f32 = PI/1.3;
 const MASS: f32 = 100.0; //20kg. Assuming one unit is a meter.
 const RESISTANCE_FACTOR: f32 = 1.0;
 
@@ -44,6 +41,7 @@ impl Camera {
     }
 
     pub fn tick(&mut self, delta: f32) {
+        
         self.pos += self.vel*delta;
         self.ori.rotate(self.rpy_vel * delta);
 
@@ -52,13 +50,23 @@ impl Camera {
         
         let resistance = -self.vel*RESISTANCE_FACTOR;
 
-        self.vel += (self.ori.get_mat().to_vectors_vert()[2]*(self.thrust) + resistance)*delta/MASS;
+        let direction_vec = self.ori.get_mat().to_vectors_vert()[2];
+
+        self.vel += (direction_vec*(self.thrust) + resistance)*delta/MASS;
+
+        //let dp = self.vel * direction_vec; //dot product
+        //let fov;
+        //if dp > 0.0 {
+        //    fov = 90.0f32.to_radians() + dp.powf(1.2)/100.0;
+        //} else {
+        //    fov = 90.0f32.to_radians();
+        //}
 
         //self.vel = self.ori.get_mat().to_vectors_vert()[2] * self.speed;
 
         //let fov = MAX_ANGLE*(self.speed-3.0)/(self.speed+0.1);
         //self.rvp.set_fov_constant_max_bound(fov);
-        //self.rvp.set_fov_constant_alpha(fov);
+        //self.cvp.set_fov_constant_alpha(fov);
     }
 }
 
@@ -76,11 +84,12 @@ impl<'a> Projector<'a> {
     }
 
     pub fn project_point(&self, point: &PointVector) -> Option<PointVector> {
-        let lambda = *point - self.cam.pos;
+        let lambda = *point - self.cam.pos; //The direction vector from the camera to the point.
         let unsolved_inv = Matrix3::from_vectors_vert([lambda, self.xcol, self.ycol]).invert();
         match unsolved_inv {
             Some(m) => {
-                return Some(m.solve_vec(self.total));  
+                let solved = m.solve_vec(self.total);
+                return Some(solved);
             },
             None => {
                 return None;

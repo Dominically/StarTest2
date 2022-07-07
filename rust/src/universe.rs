@@ -5,8 +5,8 @@ use wasm_bindgen::prelude::wasm_bindgen;
 
 use crate::{camera::{Camera, Projector}, chunkstore::ChunkStore, viewport::Viewport};
 
-const RENDER_DISTANCE:f32 = 1024.0;
-const FOV: f32 = 90.0f32;
+const RENDER_DISTANCE:f32 = 1536.0;
+const FOV: f32 = 75.0f32;
 #[wasm_bindgen]
 pub struct Universe {
     camera: Camera,
@@ -41,6 +41,7 @@ impl Universe {
         });
 
         let mut render_star_count = 0;
+        let max_dist = self.camera.cvp.get_alpha() / self.camera.rvp.get_alpha();
         for point in point_iterator { //crash here caused by out of bounds
             if let Some(p) = point {
                 
@@ -48,6 +49,7 @@ impl Universe {
                 let ay = p.z + (self.height/2) as f32;
                 if
                     p.x > 0.0 &&
+                    (1.0/p.x) < max_dist &&
                     ax >= 0.0 && ax < self.width as f32 &&
                     ay >= 0.0 && ay < self.height as f32
                 {
