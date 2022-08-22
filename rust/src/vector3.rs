@@ -99,6 +99,14 @@ impl<T: Mul<Output = T> + Copy> Mul<T> for Vector3<T> {
     }
 }
 
+impl<T: Mul<Output = T> + Add<Output = T>> Mul<Vector3<T>> for Vector3<T> {
+    type Output = T;
+
+    fn mul(self, rhs: Vector3<T>) -> Self::Output {
+        self.x * rhs.x + self.y * rhs.y + self.z * rhs.z
+    }
+} 
+
 impl<T: Div<Output = T> + Copy> Div<T> for Vector3<T> {
     type Output = Vector3<T>;
 

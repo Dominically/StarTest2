@@ -42,8 +42,8 @@ impl Chunk {
 
     fn gen_seed(coords: ChunkVector) -> u64 {
         let p = coords.x;
-        let q = coords.y * 889438532;
-        let r = coords.z * 374324760;
+        let q = coords.y * 1218/*889438532*/;
+        let r = coords.z * 3930/*374324760*/;
         let total:i64 = (p+q+r) as i64;
         unsafe {
             std::mem::transmute::<i64, u64>(total)
