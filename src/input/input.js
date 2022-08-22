@@ -22,9 +22,26 @@ let standard_mappings = { //Currently only using axis mappings.
     "speed": [6, 7]
 }
 
+let touch_mappings = {
+    "pitch": "dragvert",
+    "yaw": "draghoriz",
+    "roll": "rotate",
+    "speed": "plane"
+}
+
 const DEADZONE = 0.1;
 
 let keysPressed = {};
+
+// interface Touch {
+//     touch_id: number,
+//     startPos: [number, number]
+// }
+
+/**
+ * @type {[{touch_id: number, startPos: [number, number]. lastPos: [number, number]}]}
+ */
+let screenTouches = [];
 
 console.log("Input");
 export function setup(){
@@ -35,12 +52,48 @@ export function setup(){
     window.addEventListener("keyup", (evt)=>{
         keysPressed[evt.key.toLowerCase()] = false;
     });
+
+    window.addEventListener("touchstart", (evt)=>{
+        for (let touch of evt.changedTouches) {
+            if (screenTouches.length < 2) { //Ignore any more than 2 touches.
+                let touchPos = [touch.clientX, touch.clientY];
+                screenTouches.push({
+                    touch_id: touch.identifier,
+                    startPos: touchPos,
+                    lastPos: [...touchPos] //Shallow copy of the array to prevent mutability issues.
+                });
+
+                console.log("Touch added. Length:", screenTouches.length);
+            }
+        }
+    });
+
+    window.addEventListener("touchmove", (evt)=>{ //Update touch position.
+        for (let touch of evt.changedTouches){
+            let screenTouch = screenTouches.find((cmp)=>cmp.touch_id===touch.identifier);
+            if (screenTouch) {
+                screenTouch.lastPos = [touch.clientX, touch.clientY];
+            }
+        }
+    });
+
+    window.addEventListener("touchend", (evt) => {
+        if (evt.changedTouches.length > 0) {
+            screenTouches = []; //Remove all touches to prevent conflict.
+        }
+    });
+
+    window.addEventListener("touchcancel", (evt) => { //This never gets called.
+        if (evt.changedTouches.length > 0) {
+            screenTouches = []; //Remove all touches to prevent conflict.
+        }
+    });
 }
 /**
  * @typedef {{control: string, lo: number,hi: number, normal: number, callback:(val: number)=>void}} Query
  * @param {Query[]} queries 
  */
-export function update(queries){
+export function update(queries){ //Handles keyboard and gamepad input.
     /**@type {Gamepad}*/
     let gamepad = null;
     for (let gp of navigator.getGamepads()){
@@ -88,10 +141,27 @@ export function update(queries){
             } else { //Centered.
                 result = q.normal;
             }
-        } else {
+        } else if (screenTouches.length > 0){ //Touch input
             result = q.normal;
         }
 
         q.callback(result);
+    }
+}
+
+/**@param {string} value */
+function getTouchValue(value) {
+    let vert = 0;
+    if (screenTouches.length === 1) { //Vertical and horizontal dragging.
+        let vert_delta = screenTouches[0].lastPos - screenTouches[0].startPos;
+        vert = Math.max(Math.min(vert_delta/200, -1), 1);
+    }
+
+    switch (value) {
+        case "dragvert":
+            return vert;
+            break;
+        default:
+            return 0;
     }
 }

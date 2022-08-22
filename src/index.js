@@ -54,7 +54,7 @@ app.getTicker().add((delta)=>{
 });
 
 function updateInputs(){
-    let results = input.update([
+    input.update([
         {
             control: "roll",
             hi: -0.05,
