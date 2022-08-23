@@ -118,21 +118,26 @@ export function update(queries){ //Handles keyboard and gamepad input.
             result = q.lo;
         } else if (!lo_press && hi_press) {
             result = q.hi;
-        } else if (gamepad) {
-            let gpmap = standard_mappings[q.control];
-            let strength;
-            if (typeof gpmap === "number"){ //Axis
-                let axis = gamepad.axes[gpmap];
-                if (Math.abs(axis) < DEADZONE){
-                    strength = 0;
-                } else if (gpmap%2===0){ //Invert vertical.
-                    strength = axis;
+        } else {
+            let strength = 0;
+            if (gamepad) {
+                let gpmap = standard_mappings[q.control];
+                if (typeof gpmap === "number"){ //Axis
+                    let axis = gamepad.axes[gpmap];
+                    if (Math.abs(axis) < DEADZONE){
+                        strength = 0;
+                    } else if (gpmap%2===0){ //Invert vertical.
+                        strength = axis;
+                    } else {
+                        strength = -axis;
+                    }
                 } else {
-                    strength = -axis;
+                    strength = gamepad.buttons[gpmap[1]].value - gamepad.buttons[gpmap[0]].value;
                 }
-            } else {
-                strength = gamepad.buttons[gpmap[1]].value - gamepad.buttons[gpmap[0]].value;
+            } else if (screenTouches.length > 0) {
+                strength = getTouchValue(touch_mappings[q.control]);
             }
+            
             
             if (strength < 0) { //Left or down.
                 result = q.normal + (q.normal - q.lo)*strength;
@@ -141,8 +146,6 @@ export function update(queries){ //Handles keyboard and gamepad input.
             } else { //Centered.
                 result = q.normal;
             }
-        } else if (screenTouches.length > 0){ //Touch input
-            result = q.normal;
         }
 
         q.callback(result);
@@ -152,15 +155,19 @@ export function update(queries){ //Handles keyboard and gamepad input.
 /**@param {string} value */
 function getTouchValue(value) {
     let vert = 0;
+    let horiz = 0;
     if (screenTouches.length === 1) { //Vertical and horizontal dragging.
-        let vert_delta = screenTouches[0].lastPos - screenTouches[0].startPos;
-        vert = Math.max(Math.min(vert_delta/200, -1), 1);
+        let horiz_delta = screenTouches[0].lastPos[0] - screenTouches[0].startPos[0];
+        let vert_delta = screenTouches[0].lastPos[1] - screenTouches[0].startPos[1];
+        horiz = Math.min(Math.max(horiz_delta/1000, -1), 1);
+        vert = -Math.min(Math.max(vert_delta/1000, -1), 1);
     }
 
     switch (value) {
         case "dragvert":
             return vert;
-            break;
+        case "draghoriz":
+            return horiz;
         default:
             return 0;
     }
