@@ -61,9 +61,7 @@ export function setup(){
                     touch_id: touch.identifier,
                     startPos: touchPos,
                     lastPos: [...touchPos] //Shallow copy of the array to prevent mutability issues.
-                });
-
-                console.log("Touch added. Length:", screenTouches.length);
+                }); 
             }
         }
     });
@@ -156,11 +154,31 @@ export function update(queries){ //Handles keyboard and gamepad input.
 function getTouchValue(value) {
     let vert = 0;
     let horiz = 0;
+    let rotation = 0;
     if (screenTouches.length === 1) { //Vertical and horizontal dragging.
-        let horiz_delta = screenTouches[0].lastPos[0] - screenTouches[0].startPos[0];
+        let horiz_delta = screenTouches[0].lastPos[0] - screenTouches[0].startPos[0]; //Calculate horizontal finger distance.
         let vert_delta = screenTouches[0].lastPos[1] - screenTouches[0].startPos[1];
         horiz = Math.min(Math.max(horiz_delta/1000, -1), 1);
         vert = -Math.min(Math.max(vert_delta/1000, -1), 1);
+    } else if (screenTouches.length === 2) { //Calculate rotations.
+        let start_dx = screenTouches[1].startPos[0] - screenTouches[0].startPos[0]; //Find deltas.
+        let start_dy = screenTouches[1].startPos[1] - screenTouches[0].startPos[1];
+        let current_dx = screenTouches[1].lastPos[0] - screenTouches[0].lastPos[0];
+        let current_dy = screenTouches[1].lastPos[1] - screenTouches[0].lastPos[1];
+        
+        if (start_dx < 0) { //If fingers are the opposite way round switch everything.
+            start_dx *=-1;
+            start_dy *=-1;
+            current_dx *=-1;
+            current_dy *=-1;
+        }
+
+        let start_angle = Math.atan2(start_dy, start_dx);
+        let current_angle = Math.atan2(current_dy, current_dx);
+        let delta_angle = current_angle - start_angle;
+        let delta_angle_adj = ((delta_angle + Math.PI) % (2 * Math.PI)) - Math.PI; //Adjust angle to fit between -180 and 180 degrees.
+
+        rotation = -Math.min(Math.max(delta_angle_adj * 2 / Math.PI, -1), 1) //Limit to 90 degrees and invert     
     }
 
     switch (value) {
@@ -168,7 +186,14 @@ function getTouchValue(value) {
             return vert;
         case "draghoriz":
             return horiz;
+        case "rotate":
+            return rotation;
         default:
             return 0;
     }
+}
+
+
+function rad(deg) {
+    return Math.round(deg*180/Math.PI);
 }

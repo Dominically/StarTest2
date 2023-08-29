@@ -17,12 +17,6 @@ pub struct ChunkStoreIter<'a>{
     i: usize
 }
 
-#[wasm_bindgen]
-extern "C" {
-    #[wasm_bindgen(js_namespace = console)]
-    fn log(s: &str);
-}
-
 impl ChunkStore {
     pub fn start(cam: &Camera) -> Self {
         let (lo, hi, delta) = Self::get_gen_bounds(cam);

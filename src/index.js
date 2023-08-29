@@ -38,11 +38,8 @@ app.getTicker().add((delta)=>{
     let buffer = new Float32Array(num_stars * 3);
 
     updateInputs();
-    let start_time = Date.now();let time = Date.now() - start_time;
-    if (time > 5){
-        console.log("Slow calculation: ", time, "ms");
-    }
     universe.tick(delta);
+
     let stars_to_project = universe.project_stars(buffer);
     let rratio = universe.get_render_dist_ratio();
     app.renderStars(stars_to_project, buffer);

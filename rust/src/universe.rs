@@ -1,9 +1,9 @@
 use core::panic;
-use std::{cmp::max};
+use std::{cmp::max, time::Instant};
 
 use wasm_bindgen::prelude::wasm_bindgen;
 
-use crate::{camera::{Camera, Projector}, chunkstore::ChunkStore, viewport::Viewport};
+use crate::{camera::{Camera, Projector}, chunkstore::ChunkStore, viewport::Viewport, log, Date};
 
 const RENDER_DISTANCE:f32 = 1536.0;
 const FOV: f32 = 75.0f32;
@@ -75,7 +75,12 @@ impl Universe {
 
     pub fn tick(&mut self, delta: f32) {
         self.camera.tick(delta);
+        let now_a = Date::now();
         self.chunk_store.update(&self.camera);
+        let time = Date::now() - now_a;
+        if time > 16.0 {
+            log(&format!("Chunkgen time: {}", time));
+        }
     }
 
     pub fn set_camera_roll_vel(&mut self, roll: f32){
