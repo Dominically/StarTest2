@@ -54,19 +54,19 @@ impl Camera {
 
         self.vel += (direction_vec*(self.thrust) + resistance)*delta/MASS;
 
-        //let dp = self.vel * direction_vec; //dot product
-        //let fov;
-        //if dp > 0.0 {
-        //    fov = 90.0f32.to_radians() + dp.powf(1.2)/100.0;
-        //} else {
-        //    fov = 90.0f32.to_radians();
-        //}
+        let dp = self.vel * direction_vec; //dot product
+        let fov;
+        if dp > 0.0 {
+           fov = 90.0f32.to_radians() + dp.powf(1.2)/100.0;
+        } else {
+           fov = 90.0f32.to_radians();
+        }
 
         //self.vel = self.ori.get_mat().to_vectors_vert()[2] * self.speed;
 
         //let fov = MAX_ANGLE*(self.speed-3.0)/(self.speed+0.1);
-        //self.rvp.set_fov_constant_max_bound(fov);
-        //self.cvp.set_fov_constant_alpha(fov);
+        self.rvp.set_fov_constant_max_bound(fov);
+        self.cvp.set_fov_constant_alpha(fov);
     }
 }
 
