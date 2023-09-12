@@ -80,7 +80,7 @@ impl Universe {
         self.chunk_store.update(&self.camera);
         let time = Date::now() - now_a;
         if time > 16.0 {
-            log(&format!("Chunkgen time: {}", time));
+            log(&format!("WARNING. Slow chunkgen time: {}", time));
         }
     }
 

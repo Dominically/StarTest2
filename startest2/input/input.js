@@ -43,7 +43,6 @@ let keysPressed = {};
  */
 let screenTouches = [];
 
-console.log("Input");
 export function setup(){
     window.addEventListener("keydown", (evt)=>{
         keysPressed[evt.key.toLowerCase()] = true;
@@ -94,12 +93,15 @@ export function setup(){
 export function update(queries){ //Handles keyboard and gamepad input.
     /**@type {Gamepad}*/
     let gamepad = null;
-    for (let gp of navigator.getGamepads()){
-        if (gp && gp.connected){
-            gamepad = gp;
-            break;
+    if (window.isSecureContext) { //Whoever made controller support HTTPS only, I hate you.
+        for (let gp of navigator.getGamepads()){
+            if (gp && gp.connected){
+                gamepad = gp;
+                break;
+            }
         }
     }
+    
 
     let query_responses = [];
     for (let q of queries){

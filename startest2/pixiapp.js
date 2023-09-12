@@ -64,7 +64,6 @@ export default class PixiApp {
     }
 
     resize(width, height){
-        console.log("resize");
         this.app.renderer.resize(width, height);
     }
 
