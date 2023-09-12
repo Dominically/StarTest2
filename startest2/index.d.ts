@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-export class StarTestApp {
+export default class StarTestApp {
   /**
    * @param {boolean} useFPSCounter 
    * @param {boolean} useCompass 
