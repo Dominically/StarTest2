@@ -7,7 +7,7 @@ export default class StarTestApp {
    * @param {boolean} viewDistance
    * @returns {StarTestApp}
    */
-  static new(useFPSCounter: boolean, useCompass: boolean, viewDistance: boolean): StarTestApp;
+  static new(useFPSCounter: boolean, useCompass: boolean, viewDistance: number): StarTestApp;
   /**
    * @param {HTMLElement} element 
    */
