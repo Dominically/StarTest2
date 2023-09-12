@@ -16,8 +16,8 @@ pub fn add(a: i32, b: i32) -> i32{
 }
 
 #[wasm_bindgen]
-pub fn new_universe(width: u32, height: u32) -> Universe{
-    Universe::new(width, height)
+pub fn new_universe(width: u32, height: u32, render_distance: f32) -> Universe{
+    Universe::new(width, height, render_distance)
 }
 
 #[wasm_bindgen]

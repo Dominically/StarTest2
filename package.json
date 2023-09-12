@@ -1,5 +1,5 @@
 {
-  "name": "startest2",
+  "name": "startest2-standalone",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
@@ -10,8 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "pixi.js": "^6.5.10",
-    "startest2": "file:rust\\pkg",
+    "startest2": "link:startest2",
     "vite": "^4.4.9"
   },
   "devDependencies": {

@@ -127,7 +127,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "startest2"
+name = "startest2-rust"
 version = "0.1.0"
 dependencies = [
  "getrandom",

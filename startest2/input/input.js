@@ -15,7 +15,7 @@ let kbmappings = {
     "speed": ["c", "shift"]
 }
 
-let standard_mappings = { //Currently only using axis mappings.
+let standard_mappings = { //Controller mappngs. Currently only using axis mappings.
     "pitch": 1,
     "yaw": 0,
     "roll": 2,

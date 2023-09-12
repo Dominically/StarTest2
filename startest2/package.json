@@ -1,0 +1,16 @@
+{
+  "name": "startest2",
+  "version": "0.0.1",
+  "description": "StarTest container app.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Dominic Munn",
+  "license": "ISC",
+  "dependencies": {
+    "pixi.js": "^7.2.4",
+    "startest2-rust": "link:..\\rust\\pkg"
+  }
+}

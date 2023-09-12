@@ -1,11 +1,11 @@
 use core::panic;
-use std::{cmp::max, time::Instant};
+use std::cmp::max;
 
 use wasm_bindgen::prelude::wasm_bindgen;
 
 use crate::{camera::{Camera, Projector}, chunkstore::ChunkStore, viewport::Viewport, log, Date};
 
-const RENDER_DISTANCE:f32 = 1536.0;
+// const RENDER_DISTANCE:f32 = 1536.0;
 const FOV: f32 = 75.0f32;
 #[wasm_bindgen]
 pub struct Universe {
@@ -17,8 +17,9 @@ pub struct Universe {
 
 #[wasm_bindgen]
 impl Universe {
-    pub fn new(width: u32, height: u32) -> Self{
-        let camera = Camera::new(max(width, height) as f32, FOV.to_radians(), RENDER_DISTANCE);
+    //The default render distance is 1536.
+    pub fn new(width: u32, height: u32, render_distance: f32) -> Self{
+        let camera = Camera::new(max(width, height) as f32, FOV.to_radians(), render_distance);
         let chunk_store = ChunkStore::start(&camera);
         Universe{
             camera,

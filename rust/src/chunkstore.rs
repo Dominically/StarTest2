@@ -1,8 +1,7 @@
 use std::{slice::Iter, mem::replace};
 use itertools::iproduct;
-use wasm_bindgen::prelude::wasm_bindgen;
 
-use crate::{vector3::{ChunkVector, PointVector, Vector3}, camera::{Camera}, chunk::Chunk};
+use crate::{vector3::{ChunkVector, PointVector, Vector3}, camera::Camera, chunk::Chunk};
 
 pub struct ChunkStore {
     lo: ChunkVector,

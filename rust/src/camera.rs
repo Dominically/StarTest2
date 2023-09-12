@@ -1,4 +1,4 @@
-use crate::{vector3::{PointVector}, orientation::Orientation, viewport::Viewport, matrix::Matrix3};
+use crate::{vector3::PointVector, orientation::Orientation, viewport::Viewport, matrix::Matrix3};
 
 pub struct Camera {
     pub pos: PointVector,
@@ -59,7 +59,7 @@ impl Camera {
         if dp > 0.0 {
            fov = 90.0f32.to_radians() + dp.powf(1.2)/100.0;
         } else {
-           fov = 90.0f32.to_radians();
+            fov = 90.0f32.to_radians();
         }
 
         //self.vel = self.ori.get_mat().to_vectors_vert()[2] * self.speed;
