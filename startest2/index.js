@@ -25,7 +25,10 @@ export default class StarTestApp {
       }
     });
 
-    this.fps_counts = [0];
+    this.fpsCounts = [0];
+
+    this.fpsInterval = null;
+    this.tickFunction = null;
   }
 
   bindContainer(element){
@@ -42,26 +45,26 @@ export default class StarTestApp {
     input.setup();
   }
 
-  runSimulation() { //no stop feature will be added
-    setInterval(() => { //Update fps counter 4 times per second.
+  runSimulation() {
+    this.fpsInterval = setInterval(() => { //Update fps counter 4 times per second.
       let period = 0;
       let total_fps = 0;
-      for (let c of this.fps_counts) {
+      for (let c of this.fpsCounts) {
         period += 0.25;
         total_fps += c;
       }
 
       this.pixiApp.setFps(total_fps/period);
 
-      if (this.fps_counts.length == 4) {
-        this.fps_counts.shift();
+      if (this.fpsCounts.length == 4) {
+        this.fpsCounts.shift();
       }
 
-      this.fps_counts.push(0);
+      this.fpsCounts.push(0);
     }, 250);
 
-    this.pixiApp.getTicker().add((delta) => {
-      this.fps_counts[this.fps_counts.length - 1]++;
+    this.tickFunction = (delta) => {
+      this.fpsCounts[this.fpsCounts.length - 1]++;
       let num_stars = this.universe.count_stars();
       let buffer = new Float32Array(num_stars * 3); //* 3 for positions.
       
@@ -74,7 +77,21 @@ export default class StarTestApp {
       let direction_vecs = new Float32Array(9);
       this.universe.get_camera_vecs(direction_vecs);
       this.pixiApp.update_compass(direction_vecs);
-    });
+    };
+
+    this.pixiApp.getTicker().add(this.tickFunction);
+  }
+
+  stopSimulation() {
+    if (this.fpsInterval) {
+      clearInterval(this.fpsInterval);
+      this.fpsInterval = null;
+    }
+
+    if (this.tickFunction) {
+      this.pixiApp.getTicker().remove(this.tickFunction);
+      this.tickFunction = null;
+    }
   }
 
   _updateInputs(){
