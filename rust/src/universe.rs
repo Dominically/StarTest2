@@ -79,9 +79,9 @@ impl Universe {
         let now_a = Date::now();
         self.chunk_store.update(&self.camera);
         let time = Date::now() - now_a;
-        if time > 16.0 {
-            log(&format!("WARNING. Slow chunkgen time: {}", time));
-        }
+        // if time > 16.0 {
+        //     log(&format!("WARNING. Slow chunkgen time: {}", time));
+        // }
     }
 
     pub fn set_camera_roll_vel(&mut self, roll: f32){

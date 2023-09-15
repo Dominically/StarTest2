@@ -18,7 +18,7 @@ export default class StarTestApp {
         if (this.containerElement && resizedItem.target === this.containerElement) {
           let w = resizedItem.contentRect.width;
           let h = resizedItem.contentRect.height;
-
+          console.log(`Resize: ${w}, ${h}`);
           this.universe.set_size(w, h);
           this.pixiApp.resize(w, h);
         }
@@ -119,8 +119,8 @@ export default class StarTestApp {
       },
       {
         control: "speed",
-        hi: 40,
-        lo: -40,
+        hi: 10,
+        lo: -10,
         normal: 2,
         callback: (v)=>{this.universe.set_thrust(v)},
       },

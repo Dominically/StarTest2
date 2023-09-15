@@ -8,6 +8,8 @@ export default class PixiApp {
             // height: window.innerHeight,
             width: 512, //This is just a temporary default size to prevent errors.
             height: 512,
+            //Disabled this because it's broken on Firefox.
+            // resolution: window.devicePixelRatio, //Use window res. 
             antialias: true
         });
 
@@ -89,8 +91,6 @@ export default class PixiApp {
                 offset += 3;
             }
         }
-
-        
     }
 
     _position_star(circle, positions, offset){
