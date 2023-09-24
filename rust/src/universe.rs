@@ -3,7 +3,7 @@ use std::cmp::max;
 
 use wasm_bindgen::prelude::wasm_bindgen;
 
-use crate::{camera::{Camera, Projector}, chunkstore::ChunkStore, viewport::Viewport, log, Date};
+use crate::{camera::{Camera, Projector}, chunkstore::ChunkStore, viewport::Viewport};
 
 // const RENDER_DISTANCE:f32 = 1536.0;
 const FOV: f32 = 75.0f32;
@@ -76,9 +76,9 @@ impl Universe {
 
     pub fn tick(&mut self, delta: f32) {
         self.camera.tick(delta);
-        let now_a = Date::now();
+        // let now_a = Date::now();
         self.chunk_store.update(&self.camera);
-        let time = Date::now() - now_a;
+        // let time = Date::now() - now_a;
         // if time > 16.0 {
         //     log(&format!("WARNING. Slow chunkgen time: {}", time));
         // }

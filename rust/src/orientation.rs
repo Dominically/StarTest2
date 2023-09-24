@@ -1,4 +1,4 @@
-use crate::{vector3::{PointVector}, matrix::Matrix3};
+use crate::{vector3::PointVector, matrix::Matrix3};
 
 pub struct Orientation {
     mat: Matrix3, //Rotation matrix.

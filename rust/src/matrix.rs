@@ -1,5 +1,5 @@
-use crate::vector3::{PointVector};
-use std::{ops::Mul};
+use crate::vector3::PointVector;
+use std::ops::Mul;
 
 #[derive(Clone, Debug)]
 pub struct Matrix3 {

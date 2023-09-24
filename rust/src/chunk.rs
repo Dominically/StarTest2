@@ -2,7 +2,7 @@ use std::iter::Iterator;
 
 
 use rand::{SeedableRng, prelude::StdRng, Rng};
-use crate::{vector3::{PointVector, ChunkVector, CHUNK_SIZE}};
+use crate::vector3::{PointVector, ChunkVector, CHUNK_SIZE};
 
 
 pub struct Chunk {
