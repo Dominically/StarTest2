@@ -10,10 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "startest2": "link:startest2",
-    "vite": "^4.4.9"
+    "startest2": "link:startest2"
   },
   "devDependencies": {
+    "vite": "^4.4.9",
     "vite-plugin-top-level-await": "^1.3.1",
     "vite-plugin-wasm": "^3.2.2"
   }
